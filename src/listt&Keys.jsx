@@ -1,4 +1,5 @@
-import React from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
+import {Modal} from "./portal/portal";
 
 const productData = [
   {
@@ -55,33 +56,144 @@ const ThemeContenxt = React.createContext(
   themes.light
 );
 
-class ProductItem extends React.Component {
-  render() {
-    const { image, price, title, inStock, handleDeleteItem } = this.props;
+const ProductItem = ({ image, price, title, inStock, handleDeleteItem, id }) => (
+  <ThemeContenxt.Consumer>
+    {(theme) => (
+      <div style={{ color: theme.color }} className="productItem">
+        <img src={image} alt={title} width={100} height={150} />
+        <p>{title}</p>
+        <div>
+          <p>{price}$</p>
+          <p>{inStock}</p>
+        </div>
+        <button
+          onClick={() => handleDeleteItem(id)}
+        >
+          Delete product
+        </button>
+      </div>
+    )}
+  </ThemeContenxt.Consumer>
+);
 
-    return (
-      <ThemeContenxt.Consumer>
-        {(theme) => (
-          <div style={{ color: theme.color }} className="productItem">
-            <img src={image} alt={title} width={100} height={150} />
-            <p>{title}</p>
-            <div>
-              <p>{price}$</p>
-              <p>{inStock}</p>
-            </div>
+export const ProductShowcase = (props) => {
+  /*const [productData, setProductData] = useState([
+    {
+      id: 10077,
+      image: 'https://via.placeholder.com/600/92c952',
+      price: 99.98,
+      title: 'TEST!!!',
+      inStock: 100,
+    }
+  ]);
+  const [isLoading, setIsloading] = useState(false);*/
+  const [theme, setTheme] = useState(themes.light);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [state, setState] = useState({
+    data: [{
+      id: 10077,
+      image: 'https://via.placeholder.com/600/92c952',
+      price: 99.98,
+      title: 'TEST!!!',
+      inStock: 100,
+    }],
+    isLoading: false,
+  });
+
+  const toggleModal = () => {
+    setIsModalOpen(prevState => !prevState);
+  }
+
+  const handleDeleteProductItem = useCallback((productId) => {
+    setState(prevState => ({
+      ...prevState,
+      data: [...prevState.filter(({ id }) => productId !== id)],
+    }));
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(state => (
+      state === themes.light
+        ? themes.dark
+        : themes.light
+    ));
+  }
+
+  useEffect(() => {
+    console.log('ComponentDidMount');
+    setState(prevState => ({
+      ...prevState,
+      isLoading: true,
+    }));
+    getProducts()
+      .then(data => {
+        setState(prevState => ({
+          isLoading: false,
+          data: [...prevState.data, ...data],
+        }))
+      });
+
+    return () => {
+      console.log('ComponentWillUnmount');
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log('ComponentDidUpdate', state.isLoading);
+
+    if (!state.isLoading) {
+      console.log('Data loading complete')
+    }
+  }, [state.isLoading]);
+
+  const calculatedValue = useMemo(() => productData.map(product => ({
+    ...product,
+    description: 'TEST DESCRIPTION',
+  })), [state.data]);
+
+  return (
+    <ThemeContenxt.Provider value={theme}>
+      {state.isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <>
+          <div style={{ backgroundColor: theme.backgroundColor }} className="productWrapper">
+            {Boolean(state.data.length) && state.data.map(({image, price, title, inStock, id}) => (
+              <ProductItem
+                handleDeleteItem={handleDeleteProductItem}
+                key={id}
+                image={image}
+                title={title}
+                price={price}
+                inStock={inStock}
+                id={id}
+              />
+            ))}
+          </div>
+          <div>
             <button
-              onClick={handleDeleteItem}
+              onClick={toggleTheme}
             >
-              Delete product
+              toggle theme
             </button>
           </div>
-        )}
-      </ThemeContenxt.Consumer>
-    );
-  }
+        </>
+      )}
+      <button onClick={toggleModal}>Open modal window</button>
+      {isModalOpen && (
+        <Modal
+          onClose={toggleModal}
+        >
+          <p>Hello World!</p>
+        </Modal>
+      )}
+    </ThemeContenxt.Provider>
+  );
 }
 
-export class ProductShowcase extends React.Component {
+
+class ProductShowcase2 extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
