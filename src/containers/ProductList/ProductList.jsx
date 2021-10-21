@@ -1,18 +1,15 @@
-import "./styles.css";
-import {useDispatch, useSelector} from "react-redux";
-import ProductItem from "../ProductItem/ProductItem";
 import {useEffect} from "react";
-import {getAllProducts} from "../../api/products";
+import {connect} from "react-redux";
 import {setAllProducts} from "../../redux/actions/products";
+import ProductItem from "../ProductItem/ProductItem";
+import {getAllProducts} from "../../api/products";
+import "./styles.css";
 
-const ProductList = () => {
-  const products = useSelector(store => store.allProducts.products);
-  const dispatch = useDispatch();
-
+const ProductList = ({ products, setAllProducts }) => {
   useEffect(() => {
     getAllProducts()
       .then(products => {
-        dispatch(setAllProducts(products));
+        setAllProducts(products);
       });
   }, []);
 
@@ -34,4 +31,12 @@ const ProductList = () => {
   );
 }
 
-export default ProductList;
+const mapStateToProps = store => ({
+  products: store.allProducts.products,
+})
+
+const mapDispatchToProps = {
+  setAllProducts,
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductList);

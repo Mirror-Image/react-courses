@@ -1,36 +1,32 @@
 import {useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {getProductById} from "../../api/products";
-import {useDispatch, useSelector} from "react-redux";
+import {connect}  from "react-redux";
 import {
   clearSelectedProduct,
-  setSelectedProduct
+  setSelectedProduct,
 } from "../../redux/actions/products";
 import Spinner from "../Spinner/Spinner";
 import "./styles.css";
 
-const ProductDetail = () => {
+const ProductDetail = ({product, clearSelectedProduct, setSelectedProduct }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const { image, title, description, price } = useSelector(
-    store => store.selectedProduct.product
-  );
+  const { image, title, description, price } = product;
 
   const { productId } = useParams();
-  const dispatch = useDispatch();
-
 
   useEffect(() => {
     setIsLoading(true);
     getProductById(productId)
       .then(product => {
-        dispatch(setSelectedProduct(product));
+        setSelectedProduct(product);
       })
       .finally(() => {
         setIsLoading(false);
       });
 
     return () => {
-      dispatch(clearSelectedProduct());
+      clearSelectedProduct();
     }
   }, [productId]);
 
@@ -54,4 +50,13 @@ const ProductDetail = () => {
   );
 }
 
-export default ProductDetail;
+const mapStateToProps = store => ({
+  product: store.selectedProduct.product,
+});
+
+const mapDispatchToProps = {
+  clearSelectedProduct,
+  setSelectedProduct
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);
