@@ -1,0 +1,14 @@
+.container {
+	display: flex;
+	flex-direction: row;
+}
+
+.image__wrapper {
+	flex-wrap: wrap;
+}
+
+.image {
+
+	width: 150px;
+	height: 250px;
+}

@@ -1,0 +1,28 @@
+.item {
+	width: 182px;
+	padding: 32px;
+	text-decoration: none;
+	border-radius: 16px;
+	cursor: pointer;
+}
+
+.item:hover {
+	box-shadow: 1px 4px 16px 2px rgba(0, 0, 0, 0.25);
+}
+
+.item__img {
+	width: 100px;
+	height: 150px;
+}
+
+.item__link {
+	text-decoration: none;
+}
+
+.item__link--title {
+	line-height: 1rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 600;
+}
