@@ -2,15 +2,11 @@ import {useEffect} from "react";
 import {connect} from "react-redux";
 import {setAllProducts} from "../../redux/actions/products";
 import ProductItem from "../ProductItem/ProductItem";
-import {getAllProducts} from "../../api/products";
 import "./styles.css";
 
 const ProductList = ({ products, setAllProducts }) => {
   useEffect(() => {
-    getAllProducts()
-      .then(products => {
-        setAllProducts(products);
-      });
+    setAllProducts();
   }, []);
 
   return (

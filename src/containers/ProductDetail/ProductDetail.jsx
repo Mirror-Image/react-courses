@@ -17,10 +17,7 @@ const ProductDetail = ({product, clearSelectedProduct, setSelectedProduct }) => 
 
   useEffect(() => {
     setIsLoading(true);
-    getProductById(productId)
-      .then(product => {
-        setSelectedProduct(product);
-      })
+    setSelectedProduct(productId)
       .finally(() => {
         setIsLoading(false);
       });
