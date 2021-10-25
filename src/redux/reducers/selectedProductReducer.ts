@@ -1,10 +1,18 @@
 import {ActionTypes} from "../../constants/actionTypes";
+import {IProduct} from "../../api/products";
 
-const initialState = {
-  product: {},
+type ISelectedProductInitialState = {
+  product: null | IProduct
+}
+
+const initialState: ISelectedProductInitialState = {
+  product: null,
 };
 
-const selectedProductReducer = (state = initialState, { type, payload }) => {
+const selectedProductReducer = (
+  state = initialState,
+  { type, payload }: { type: string, payload: any }
+) => {
   switch (type) {
     case ActionTypes.SET_SELECTED_PRODUCT:
       return {

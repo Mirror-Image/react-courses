@@ -1,6 +1,5 @@
 import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {getProductById} from "../../api/products";
+import {FC, useEffect, useState} from "react";
 import {connect}  from "react-redux";
 import {
   clearSelectedProduct,
@@ -8,12 +7,26 @@ import {
 } from "../../redux/actions/products";
 import Spinner from "../Spinner/Spinner";
 import "./styles.css";
+import {IProduct} from "../../api/products";
+import {RootState} from "../../redux/store";
 
-const ProductDetail = ({product, clearSelectedProduct, setSelectedProduct }) => {
-  const [isLoading, setIsLoading] = useState(false);
+type IProductDetailProps = {
+  product: IProduct,
+  clearSelectedProduct: () => void,
+  setSelectedProduct: (productId: number | string) => Promise<void | IProduct>,
+  isSelected?: boolean
+}
+
+const ProductDetail: FC<IProductDetailProps> = ({
+  product,
+  clearSelectedProduct,
+  setSelectedProduct,
+  isSelected,
+}) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { image, title, description, price } = product;
 
-  const { productId } = useParams();
+  const { productId } = useParams<{ productId: string }>();
 
   useEffect(() => {
     setIsLoading(true);
@@ -47,7 +60,7 @@ const ProductDetail = ({product, clearSelectedProduct, setSelectedProduct }) => 
   );
 }
 
-const mapStateToProps = store => ({
+const mapStateToProps = (store: RootState) => ({
   product: store.selectedProduct.product,
 });
 

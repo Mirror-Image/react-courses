@@ -1,10 +1,17 @@
-import {useEffect} from "react";
+import {FC, useEffect} from "react";
 import {connect} from "react-redux";
 import {setAllProducts} from "../../redux/actions/products";
 import ProductItem from "../ProductItem/ProductItem";
 import "./styles.css";
+import {IProduct} from "../../api/products";
+import {RootState} from "../../redux/store";
 
-const ProductList = ({ products, setAllProducts }) => {
+type IProductListProps = {
+  products: Array<IProduct>,
+  setAllProducts: () => void,
+}
+
+const ProductList: FC<IProductListProps> = ({ products, setAllProducts }) => {
   useEffect(() => {
     setAllProducts();
   }, []);
@@ -27,7 +34,7 @@ const ProductList = ({ products, setAllProducts }) => {
   );
 }
 
-const mapStateToProps = store => ({
+const mapStateToProps = (store: RootState) => ({
   products: store.allProducts.products,
 })
 

@@ -1,6 +1,7 @@
 import "./style.css";
+import {FC} from "react";
 
-const Spinner = () => (
+const Spinner: FC = () => (
   <div className="spinner" />
 );
 

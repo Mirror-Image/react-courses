@@ -1,7 +1,9 @@
 import {ActionTypes} from "../../constants/actionTypes";
-import {getAllProducts, getProductById} from "../../api/products";
+import {getAllProducts, getProductById, IProduct} from "../../api/products";
+import {Dispatch} from "redux";
+import {RootState} from "../store";
 
-export const setAllProducts = () => (dispatch, state) =>  {
+export const setAllProducts = () => (dispatch: Dispatch, state: () => RootState): void =>  {
   getAllProducts()
     .then(products => {
       dispatch({
@@ -13,7 +15,9 @@ export const setAllProducts = () => (dispatch, state) =>  {
     });
 }
 
-export const setSelectedProduct = productId => dispatch => {
+export const setSelectedProduct = (
+  productId: number | string
+) => (dispatch: Dispatch): Promise<void | IProduct> => {
   return getProductById(productId)
     .then(product => {
       dispatch({
@@ -23,7 +27,7 @@ export const setSelectedProduct = productId => dispatch => {
     })
 }
 
-export const clearSelectedProduct = () => dispatch => {
+export const clearSelectedProduct = () => (dispatch: Dispatch): void => {
   dispatch({
       type: ActionTypes.CLEAR_SELECTED_PRODUCT,
   });

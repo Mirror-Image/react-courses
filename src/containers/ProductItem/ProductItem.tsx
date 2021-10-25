@@ -1,7 +1,20 @@
-import "./styles.css";
 import {Link} from "react-router-dom";
+import {FC} from "react";
+import "./styles.css";
 
-const ProductItem = ({ id, image, price, title }) => {
+type IProductItemProps = {
+  id: number | string,
+  image: string,
+  price: string,
+  title: string,
+}
+
+const ProductItem: FC<IProductItemProps> = ({
+  id,
+  image,
+  price,
+  title ,
+}) => {
 
   return (
     <Link className="item" to={`/product/${id}`}>

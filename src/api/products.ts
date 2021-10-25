@@ -1,6 +1,15 @@
 import {GET_ALL_PRODUCTS_URL} from "../constants/productsURL";
 
-export const getAllProducts = async () => {
+export type IProduct = {
+  id: number,
+  title: string,
+  price: string,
+  category: string,
+  description: string,
+  image: string,
+}
+
+export const getAllProducts = async (): Promise<IProduct[]> => {
   const response = await fetch(
     GET_ALL_PRODUCTS_URL, {
       method: "GET",
@@ -10,7 +19,7 @@ export const getAllProducts = async () => {
   return response.json();
 }
 
-export const getProductById = async (productId) => {
+export const getProductById = async (productId: number | string): Promise<IProduct> => {
   const response = await fetch(
     `${GET_ALL_PRODUCTS_URL}/${productId}`, {
       method: "GET",
